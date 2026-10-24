@@ -220,7 +220,9 @@ function renderMedia(m) {
 }
 
 function formatViews(n) {
-  return n >= 1000 ? `${(n / 1000).toFixed(1).replace(/\.0$/, "")}K` : String(n);
+  const short = (v, unit) => `${v.toFixed(1).replace(/\.0$/, "")}${unit}`;
+  if (n >= 1e6) return short(n / 1e6, "M");
+  return n >= 1000 ? short(n / 1000, "K") : String(n);
 }
 
 // A reel cropped to just the video (no likes/comments footer), with its view count underneath
