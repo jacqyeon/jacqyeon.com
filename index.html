@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jacq Jaemin Yeon</title>
+<style>
+  /* ABC Dinamo trial fonts, copied from the user's font library (same faces the Cargo site uses) */
+  @font-face {
+    font-family: "Diatype Variable";
+    src: url("fonts/ABCDiatypePlusVariable-Trial.woff2") format("woff2");
+    font-weight: 200 1000;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "ABC Stefan";
+    src: url("fonts/ABCStefan-Simple-Trial.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  :root {
+    --bg: #b4dbb9;
+    --landing-bg: #2a2a2a;
+    --about-bg: #e4f8d1;
+    --ink-60: rgba(0, 0, 0, 0.6);
+    --ink-75: rgba(0, 0, 0, 0.75);
+    --role: rgba(89, 89, 89, 0.75);
+    --nav: rgba(255, 255, 255, 0.75);
+    --sans: "Diatype Variable", "Inter", -apple-system, "Helvetica Neue", sans-serif;
+  }
+
+  /* Cargo scales rem with the viewport: 12.96px at 1440px wide */
+  html { font-size: 0.9vw; scroll-behavior: smooth; }
+  @media (max-width: 768px) { html { font-size: 2.576vw; } }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    font-family: var(--sans);
+    font-variation-settings: 'slnt' 0, 'MONO' 0;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  a:active { opacity: 0.7; }
+
+  .caption {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--ink-75);
+  }
+
+  /* ---------- Top nav ---------- */
+  .top-nav {
+    position: fixed;
+    top: 0; right: 0;
+    z-index: 100;
+    padding: 1.5rem;
+    text-align: right;
+    mix-blend-mode: exclusion;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--nav);
+  }
+  .top-nav .row { display: flex; justify-content: flex-end; align-items: center; gap: 0.3em; }
+  .top-nav .row:first-child { margin-top: 1.2em; }
+  .icon { width: 1em; height: 1em; display: inline-block; vertical-align: -0.12em; }
+
+  /* ---------- Landing ---------- */
+  .landing {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--landing-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .landing iframe {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: max(100vw, 177.78vh);
+    height: max(56.25vw, 100vh);
+    transform: translate(-50%, -50%);
+    border: 0;
+    pointer-events: none;
+  }
+  .landing .checker {
+    position: absolute; inset: 0;
+    background: url("images/checkerboard_64.png") 0 0 / 16px 16px;
+    image-rendering: pixelated;
+    pointer-events: none;
+  }
+  .landing .title {
+    position: relative;
+    margin-bottom: calc(1.1rem * 1.2);
+    text-align: center;
+    color: var(--nav);
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  /* ---------- Works ---------- */
+  .works { padding: 1.5rem; padding-top: 3.1rem; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    align-items: start;
+  }
+  .work { display: block; }
+  .work img {
+    width: 100%;
+    aspect-ratio: 5 / 3;
+    object-fit: cover;
+    display: block;
+    border-radius: 20px;
+  }
+  .work .caption { margin-top: 0.5em; margin-bottom: 2em; text-align: center; }
+  .role {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 3.2;
+    color: var(--role);
+  }
+
+  /* ---------- About ---------- */
+  .about {
+    background: var(--about-bg);
+    min-height: 100vh;
+    /* Clip sideways only, so spread polaroids can rise over the works grid like the original */
+    overflow-x: clip;
+  }
+  .about-inner { max-width: 90%; margin: 0 auto; padding-top: calc(1.6rem * 1.05 * 2); }
+  .about-text-block { max-width: 800px; margin: 2rem 0 0; padding: 0 2rem; }
+  .about-text { margin: 0 0 2rem; }
+  .about-links { display: flex; gap: 4rem; margin-top: 2rem; }
+  .about-link { transition: opacity 0.2s ease; }
+  .about-link:hover { opacity: 0.6; }
+
+  .polaroid-stack-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15rem 0 4rem;
+  }
+  .polaroid-stack { position: relative; width: 280px; height: 340px; cursor: pointer; }
+  .polaroid-frame {
+    position: absolute; top: 0; left: 0;
+    width: 280px;
+    background: #fdfdfa;
+    padding: 12px 12px 38px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 4px 8px rgba(0,0,0,.12), 0 12px 24px rgba(0,0,0,.18);
+    transition: transform 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+  .polaroid-frame img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.05), 0 1px 3px rgba(0,0,0,.15);
+  }
+  .polaroid-frame::after {
+    content: '';
+    position: absolute; inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,.04) 100%);
+  }
+  .polaroid-text {
+    margin-top: 8px;
+    text-align: center;
+    font-family: "ABC Stefan", var(--sans);
+    font-size: 1.3rem;
+    line-height: 1.05;
+    color: var(--ink-60);
+  }
+
+  /* Stacked, slightly rotated */
+  .polaroid-frame:nth-child(1) { transform: translate(0, 0) rotate(0deg); z-index: 6; }
+  .polaroid-frame:nth-child(2) { transform: translate(-8px, -4px) rotate(-5deg); z-index: 5; }
+  .polaroid-frame:nth-child(3) { transform: translate(6px, -6px) rotate(4deg); z-index: 4; }
+  .polaroid-frame:nth-child(4) { transform: translate(-4px, 6px) rotate(-3deg); z-index: 3; }
+  .polaroid-frame:nth-child(5) { transform: translate(8px, 4px) rotate(6deg); z-index: 2; }
+  .polaroid-frame:nth-child(6) { transform: translate(-6px, 8px) rotate(-7deg); z-index: 1; }
+
+  /* Spread on hover (desktop) or tap (all devices) */
+  @media (hover: hover) {
+    .polaroid-stack:hover .polaroid-frame:nth-child(1) { transform: translate(-2vw, -32vh) rotate(-3deg); }
+    .polaroid-stack:hover .polaroid-frame:nth-child(2) { transform: translate(-26vw, -22vh) rotate(-9deg); }
+    .polaroid-stack:hover .polaroid-frame:nth-child(3) { transform: translate(22vw, -18vh) rotate(7deg); }
+    .polaroid-stack:hover .polaroid-frame:nth-child(4) { transform: translate(24vw, 14vh) rotate(-5deg); }
+    .polaroid-stack:hover .polaroid-frame:nth-child(5) { transform: translate(0, 4vh) rotate(3deg); }
+    .polaroid-stack:hover .polaroid-frame:nth-child(6) { transform: translate(-24vw, 12vh) rotate(-8deg); }
+  }
+  .polaroid-stack.spread .polaroid-frame:nth-child(1) { transform: translate(-2vw, -32vh) rotate(-3deg); }
+  .polaroid-stack.spread .polaroid-frame:nth-child(2) { transform: translate(-26vw, -22vh) rotate(-9deg); }
+  .polaroid-stack.spread .polaroid-frame:nth-child(3) { transform: translate(22vw, -18vh) rotate(7deg); }
+  .polaroid-stack.spread .polaroid-frame:nth-child(4) { transform: translate(24vw, 14vh) rotate(-5deg); }
+  .polaroid-stack.spread .polaroid-frame:nth-child(5) { transform: translate(0, 4vh) rotate(3deg); }
+  .polaroid-stack.spread .polaroid-frame:nth-child(6) { transform: translate(-24vw, 12vh) rotate(-8deg); }
+
+  /* ---------- Project overlay ---------- */
+  .overlay {
+    position: fixed; inset: 0;
+    z-index: 50;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: rgba(0, 0, 0, 0.15);
+    padding: 14rem 0;
+  }
+  .overlay[hidden] { display: none; }
+  body.overlay-open { overflow: hidden; }
+  .project-panel { padding: 1.5rem; }
+  .project-panel a { color: #000; }
+  .project-head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2.85em;
+  }
+  .badges { margin-top: 1.2em; }
+  .badge { display: inline-block; vertical-align: top; }
+  .project-media > * + * { margin-top: 2.6em; }
+  .embed { position: relative; aspect-ratio: 16 / 9; }
+  .embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  /* YouTube episode beside its reel; reel column sized so both are the same height */
+  .pair {
+    display: grid;
+    grid-template-columns: 1fr 0.45fr;
+    gap: 1rem;
+    align-items: start;
+  }
+  .pair-note { line-height: 1.2; margin-top: 0.6em; }
+  .reels { margin-top: 4em; }
+  .reels-head { margin-bottom: 1em; }
+  .reels-total { color: var(--role); margin-left: 0.6em; }
+  .reel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(326px, 1fr));
+    gap: 1rem;
+  }
+  .reel { margin: 0; }
+  /* The embed is a 54px header + 4:5 video + footer; show only the video */
+  .reel-frame {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: #000;
+  }
+  .reel-frame iframe {
+    position: absolute;
+    top: -54px; left: 0;
+    width: 100%;
+    height: calc(100% + 54px + 400px);
+    border: 0;
+  }
+  .reel figcaption {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5em;
+  }
+  .reel-views { font-weight: 600; color: #000; }
+  .project-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .project-gallery img { width: 100%; display: block; }
+  .media-text blockquote { margin: 1.2em 0 0; padding: 0 0 0 2em; }
+  .close-bottom { text-align: center; margin-top: 4.8em; }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 768px) {
+    /* Cargo shrinks page padding to 30% on mobile */
+    .top-nav { padding: 0.45rem; }
+    .works { padding: 0.45rem; padding-top: calc(0.45rem + 1.68rem); }
+    .grid { grid-template-columns: 1fr; row-gap: 0; }
+    .about-inner { max-width: 100%; }
+    .about-text-block { padding: 0 0.6rem; }
+    .overlay { padding: 4.2rem 0; }
+    .project-panel { padding: 0.45rem; }
+    .project-head { grid-template-columns: 1fr; gap: 0; margin-bottom: 1.68rem; }
+    .project-head > * { padding-right: 2.07rem; }
+    .badges { margin-bottom: 1.4rem; }
+    .project-gallery { grid-template-columns: 1fr; gap: 2rem; }
+    .pair { grid-template-columns: 1fr; }
+    .polaroid-stack-container { padding-top: 4.2rem; }
+    .polaroid-stack { width: 180px; height: 220px; }
+    .polaroid-frame { width: 180px; padding: 10px 10px 28px; }
+    .polaroid-text { margin-top: 6px; }
+    .polaroid-stack.spread .polaroid-frame:nth-child(1) { transform: translate(20vw, -8vh) rotate(-4deg); }
+    .polaroid-stack.spread .polaroid-frame:nth-child(2) { transform: translate(-20vw, -8vh) rotate(-10deg); }
+    .polaroid-stack.spread .polaroid-frame:nth-child(3) { transform: translate(20vw, 18vh) rotate(8deg); }
+    .polaroid-stack.spread .polaroid-frame:nth-child(4) { transform: translate(-20vw, 18vh) rotate(-6deg); }
+    .polaroid-stack.spread .polaroid-frame:nth-child(5) { transform: translate(20vw, 44vh) rotate(5deg); }
+    .polaroid-stack.spread .polaroid-frame:nth-child(6) { transform: translate(-20vw, 44vh) rotate(-12deg); }
+  }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="row">
+    <a href="#top" aria-label="Home">
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><ellipse cx="12" cy="14" rx="11" ry="4"/><path d="M6 13a6 6 0 0 1 12 0z"/><circle cx="7" cy="14" r="1" fill="#000"/><circle cx="12" cy="15" r="1" fill="#000"/><circle cx="17" cy="14" r="1" fill="#000"/></svg>
+    </a>
+    <a href="#top">JACQ YEON</a>
+    <a href="#top">›</a>
+  </div>
+  <div class="row">
+    <a href="#works" aria-label="Work">
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M2 5h8l2 2h10v13H2z"/></svg>
+    </a>
+    <a href="#works">WORK</a>
+    <span>›</span>
+  </div>
+  <div class="row">
+    <a href="#about" aria-label="About">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 9a8 8 0 0 1 14 0"/><path d="M7 20c-1-3-1-6 0-8a5 5 0 0 1 10 1c0 2-1 3-1 5"/><path d="M10 21c-1-3-1-5 0-7a2 2 0 0 1 4 1c0 2 0 4-1 6"/><path d="M12 14v6"/></svg>
+    </a>
+    <a href="#about">ABOUT</a>
+    <a href="#about">›</a>
+  </div>
+</nav>
+
+<section class="landing" id="top">
+  <iframe src="https://player.vimeo.com/video/833822199?title=0&byline=0&portrait=0&muted=1&autoplay=1&autopause=0&loop=1&background=1"
+          allow="autoplay; fullscreen" title="Background reel"></iframe>
+  <div class="checker"></div>
+  <div class="title">Jacqueline Jaemin Yeon<br>is a filmmaker/editor based in NYC</div>
+</section>
+
+<section class="works" id="works">
+  <div class="grid" id="grid"></div>
+</section>
+
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-text-block">
+      <p class="about-text caption">
+        Jacqueline Jaemin Yeon<br><br>
+        I film and edit stories.<br>
+        Grew up in multiple cities. Currently based in NYC.
+      </p>
+      <div class="about-links caption">
+        <a class="about-link" href="files/Jacqueline-Yeon-Resume.pdf" target="_blank" rel="noopener">→ Resume</a>
+        <a class="about-link" href="https://www.linkedin.com/in/jacqyeon" target="_blank" rel="noopener">→ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="polaroid-stack-container">
+      <div class="polaroid-stack" id="polaroids"></div>
+    </div>
+  </div>
+</section>
+
+<div class="overlay" id="overlay" hidden></div>
+
+<script src="views.js"></script>
+<script src="projects.js"></script>
+<script>
+  const IMG = "images/works/";
+
+  // [role, title (with optional client on first line), cover image (Cargo path, full URL, or images/...), project slug]
+  const works = [
+    ["Editor", "[ArtDrunk]<br>Short-form Series", "images/artdrunk-short-form-cover.jpg", "artdrunk-short-form-series"],
+    ["Editor", "[ArtDrunk]<br>How We Art Series", "images/artdrunk-how-we-art-cover.jpg", "artdrunk-how-we-art-series"],
+    ["Editor", "[Korean American Story]<br>Through the Fog Series", "images/kas-through-the-fog-cover.jpg", "kas-through-the-fog-series"],
+    ["Editor", "[Korean American Story]<br>Letters to My Hometown Series", "X2948464177904749015669959238672/KAS-LTMH-Cover.jpg", "kas-ltmh-series"],
+    ["Editor", "[Korean American Story]<br>Legacy Project Series", "J2948216036490880379513689023504/KAS-LP-Series-Cover.jpeg", "kas-lp-series"],
+    ["Editor", "[Korean American Story]<br>15 Years of Storytelling Compilations", "O2948216036472433635439979471888/KAS-15YoS-Compilations-Cover.jpeg", "kas-15-yos-compilations"],
+    ["Editor", "[Korean American Story]<br>Events Highlight", "J2948481279401564405878814090256/KAS-Events-Highlight-Cover.jpg", "kas-events-highlight"],
+    ["Director + Editor + Film Production", "Cent’Anni, Ferdi!", "I2948216036546220611734817678352/Centanni-Ferdi-Cover.png", "centanni-ferdi"],
+    ["Film Production", "Memory Fossil", "R2948216036583114099882236781584/Memory-Fossil-Cover.jpg", "memory-fossil"],
+    ["Film Production", "How to Live as an Asian Woman in NYC", "P2948216036564667355808527229968/How-to-Cover.png", "how-to-live-as-an-asian-woman-in-nyc"],
+    ["Film Production + Music Composition", "[Aroom Studio]<br>Brand Film", "G2948216036417093403218850817040/Aroom-Dark-Cover.jpg", "aroom-studio-brand-film"],
+    ["Film Production", "[Aroom Studio]<br>Customer’s Story", "F2948216036435540147292560368656/Aroom-Inside-Cover.png", "aroom-studio-customers-story"],
+    ["Interview + Editor", "[HYBE x Kpop Nara]<br>BTS Fan Interview", "U2949950466238137818753749951504/btsxkpopnara.jpg", "hybe-x-kpop-nara-bts-fan-interview"],
+    ["Director + Editor + Music Composition", "Table for One Series", "A2948473788400157001314417452048/Table-for-One-Cover.jpg", "table-for-one-series"],
+    ["Editor", "Pathways Feature Documentary Teaser", "R2948473603434654174228743398416/Pathways-Cover.jpg", "pathways-feature-documentary-teaser"],
+    ["Film", "Joshua Tree", "O2948468571734719932548058653712/Joshua-Tree.jpg", "joshua-tree"],
+  ];
+
+  document.getElementById("grid").innerHTML = works.map(([role, title, img, slug]) => `
+    <a class="work" href="#/${slug}">
+      <img src="${/^(https?:|images\/)/.test(img) ? img : IMG + img}" alt="" loading="lazy">
+      <span class="caption"><span class="role">${role}</span>${title}</span>
+    </a>`).join("");
+
+  const ORIG = "images/about/";
+  const polaroids = [
+    ["NYC", "Y2948645007444640590851735495696/NYC.jpg"],
+    ["Seoul", "A2948645007426193846778025944080/Seoul.JPG"],
+    ["LA", "C2948645007481534078999154598928/LA.jpg"],
+    ["Shanghai", "G2948645007407747102704316392464/Shanghai.jpg"],
+    ["Ollantaytambo, Peru", "Z2948645007463087334925445047312/Peru.JPG"],
+    ["Fairfax, Virginia", "S2948645007499980823072864150544/Fairfax--VA.jpg"],
+  ];
+
+  const stack = document.getElementById("polaroids");
+  stack.innerHTML = polaroids.map(([place, img]) => `
+    <div class="polaroid-frame">
+      <img src="${ORIG}${img}" alt="${place}">
+      <div class="polaroid-text">${place}</div>
+    </div>`).join("");
+  stack.addEventListener("click", () => stack.classList.toggle("spread"));
+  // Open a project as an overlay when the hash is #/slug, like Cargo's overlay pages
+  const overlay = document.getElementById("overlay");
+  function route() {
+    const slug = location.hash.startsWith("#/") ? decodeURIComponent(location.hash.slice(2)) : null;
+    const project = slug && PROJECTS[slug];
+    if (project) {
+      overlay.innerHTML = renderProject(project);
+      overlay.hidden = false;
+      overlay.scrollTop = 0;
+      document.body.classList.add("overlay-open");
+    } else if (!overlay.hidden) {
+      overlay.hidden = true;
+      overlay.innerHTML = "";
+      document.body.classList.remove("overlay-open");
+    }
+  }
+  // Clicking the dimmed area around the panel closes it
+  overlay.addEventListener("click", e => {
+    if (e.target === overlay) location.hash = "#works";
+  });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && !overlay.hidden) location.hash = "#works";
+  });
+  window.addEventListener("hashchange", route);
+  route();
+</script>
+</body>
+</html>

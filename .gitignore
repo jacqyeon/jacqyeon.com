@@ -1,0 +1,8 @@
+# Local tooling and notes (not part of the site)
+.claude/
+CLAUDE.md
+.DS_Store
+
+# ABC Dinamo trial fonts: not licensed for public distribution.
+# Remove this line once web licenses are bought (or swap in licensed font files).
+fonts/
