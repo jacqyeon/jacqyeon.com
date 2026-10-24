@@ -6,3 +6,7 @@ CLAUDE.md
 # ABC Dinamo trial fonts: not licensed for public distribution.
 # Remove this line once web licenses are bought (or swap in licensed font files).
 fonts/
+
+# Local font comparison (uses the trial fonts as a reference)
+font-compare.html
+_compare/
